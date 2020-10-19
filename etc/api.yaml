@@ -1,0 +1,243 @@
+swagger: "2.0"
+info:
+  description: "API for conversion country code to country name from remote API https://www.travel-advisory.info/api"
+  version: "1.0.0"
+  title: "Country Code Lookup API"
+host: 127.0.0.1
+basePath: "/api/v1/"
+tags:
+  - name: "CcLookup"
+    description: "Country Code Lookup API"
+schemes:
+  - "https"
+  - "http"
+produces:
+  - "application/json"
+#==========[ Paths ]==========
+paths:
+  /convert/{countryCodes}:
+    get:
+      tags: ['ccLookup']
+      operationId: GetCountryNames
+      summary: Get Country Code -> Country Name Array
+      description: "Returns JSONArray file with 'CountryCode' and corresponding 'CountryName' pairs."
+      parameters:
+        - $ref: '#/parameters/countryCodes'
+        - $ref: '#/parameters/refresh'
+      responses:
+        200:
+          description: Country Code -> Country Name JSONArray file.
+          schema:
+            $ref: '#/definitions/CountryNames'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+        default:
+          $ref: '#/responses/default'
+
+  /convertreverse/{countryNames}:
+    get:
+      tags: ['ccLookup']
+      operationId: GetCountryCodes
+      summary: Get Country Name -> Country Code array
+      description: "Returns JSONArray file with 'CountryName' and corresponding 'CountryCode' pairs."
+      parameters:
+        - $ref: '#/parameters/countryNames'
+        - $ref: '#/parameters/refresh'
+      responses:
+        200:
+          description: Country Name -> Country Code JSONArray file.
+          schema:
+            $ref: '#/definitions/CountryCodes'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+        default:
+          $ref: '#/responses/default'
+
+  /health:
+    get:
+      tags: ['ccLookup']
+      operationId: HealthCheck
+      summary: Get API Health Check
+      description: "Returns JSON file with 'Status': 'Healthy/Unhealthy' pair."
+      responses:
+        200:
+          description: Country Code -> Country Name JSON file.
+          schema:
+            $ref: '#/definitions/HealthCheck'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+        default:
+          $ref: '#/responses/default'
+
+  /diag:
+    get:
+      tags: ['ccLookup']
+      operationId: DiagRemoteApi
+      summary: Get Remote API Status
+      description: Returns JSON file with remote API Status.
+      responses:
+        200:
+          description: Remote API Status Json File.
+          schema:
+            $ref: '#/definitions/RemoteApiStatus'
+        400:
+          $ref: '#/responses/400'
+        401:
+          $ref: '#/responses/401'
+        404:
+          $ref: '#/responses/404'
+        500:
+          $ref: '#/responses/500'
+        default:
+          $ref: '#/responses/default'
+
+  #========== [ Definitions ] =========================
+definitions:
+  CountryNames:
+    description: Country Code to Country Name JSONArray file format.
+    type: array
+    items:
+      $ref: '#/definitions/CountryName'
+
+  CountryName:
+    description: Country Code to Country Name JSONObject.
+    type: object
+    required:
+      - countryCode
+      - countryName
+    properties:
+      countryCode:
+        description: Country Code
+        type: string
+      countryName:
+        description: Country Name
+        type: string
+
+  CountryCodes:
+    description: Country Name to Country Code JSONArray file format.
+    type: array
+    items:
+      $ref: '#/definitions/CountryCode'
+
+  CountryCode:
+    description: Country Name to Country Code JSONObject.
+    type: object
+    required:
+      - countryName
+      - countryCode
+    properties:
+      countryName:
+        description: Country Name.
+        type: string
+      countryCode:
+        description: Country Code.
+        type: string
+
+  HealthCheck:
+    description: Health Check JSON file format.
+    type: object
+    required:
+      - status
+    properties:
+      status:
+        description: Health Check Status.
+        type: string
+        enum:
+          - healthy
+          - unhealthy
+
+  RemoteApiStatus:
+    description: Remote Api Status JSON file format.
+    type: object
+    required:
+      - api_status
+    properties:
+      api_status:
+        description: Remote Api status JSON file format.
+        type: object
+        properties:
+          code:
+            type: integer
+          status:
+            type: string
+            enum:
+              - ok
+              - fail
+
+  Error:
+    description: Error Information.
+    required:
+      - code
+      - message
+    properties:
+      code:
+        description: A short error code that defines the error, meant for programmatic parsing.
+        type: string
+      message:
+        description: A human-readable error string.
+        type: string
+
+#==========[ Parameters ]==============================================================================
+parameters:
+  countryCodes:
+    name: countryCodes
+    type: string
+    in: path
+    required: true
+    description: Comma separated country codes
+
+  refresh:
+    name: refresh
+    type: boolean
+    in: query
+    required: true
+    default: true
+    description: true, if retrieve info from API; false - if from local file.
+
+  countryNames:
+    name: countryNames
+    type: string
+    in: path
+    required: true
+    description: Comma separated country names
+
+#==========[ Responses ]=================================================================================
+responses:
+  400:
+    description: Bad Request
+    schema:
+      $ref: '#/definitions/Error'
+  401:
+    description: Unauthorized
+    schema:
+      $ref: '#/definitions/Error'
+  404:
+    description: Not Found
+    schema:
+      $ref: '#/definitions/Error'
+  500:
+    description: Internal Server Error
+    schema:
+      $ref: '#/definitions/Error'
+  default:
+    description: Unknown Error
+    schema:
+      $ref: '#/definitions/Error'
