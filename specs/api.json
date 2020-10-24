@@ -1,0 +1,390 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API for conversion country code to country name from remote API https://www.travel-advisory.info/api",
+    "version" : "1.0.0",
+    "title" : "Country Code Lookup API"
+  },
+  "host" : "127.0.0.1",
+  "basePath" : "/api/v1/",
+  "tags" : [ {
+    "name" : "CcLookup",
+    "description" : "Country Code Lookup API"
+  } ],
+  "schemes" : [ "https", "http" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/convert/{countryCodes}" : {
+      "get" : {
+        "tags" : [ "ccLookup" ],
+        "summary" : "Get Country Code -> Country Name Array",
+        "description" : "Returns JSONArray file with 'CountryCode' and corresponding 'CountryName' pairs.",
+        "operationId" : "GetCountryNames",
+        "parameters" : [ {
+          "name" : "countryCodes",
+          "in" : "path",
+          "description" : "Comma separated country codes",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "refresh",
+          "in" : "query",
+          "description" : "true, if retrieve info from API; false - if from local file.",
+          "required" : true,
+          "type" : "boolean",
+          "default" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Country Code -> Country Name JSONArray file.",
+            "schema" : {
+              "$ref" : "#/definitions/CountryNames"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unknown Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/convertreverse/{countryNames}" : {
+      "get" : {
+        "tags" : [ "ccLookup" ],
+        "summary" : "Get Country Name -> Country Code array",
+        "description" : "Returns JSONArray file with 'CountryName' and corresponding 'CountryCode' pairs.",
+        "operationId" : "GetCountryCodes",
+        "parameters" : [ {
+          "name" : "countryNames",
+          "in" : "path",
+          "description" : "Comma separated country names",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "refresh",
+          "in" : "query",
+          "description" : "true, if retrieve info from API; false - if from local file.",
+          "required" : true,
+          "type" : "boolean",
+          "default" : true
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Country Name -> Country Code JSONArray file.",
+            "schema" : {
+              "$ref" : "#/definitions/CountryCodes"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unknown Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/health" : {
+      "get" : {
+        "tags" : [ "ccLookup" ],
+        "summary" : "Get API Health Check",
+        "description" : "Returns JSON file with 'Status': 'Healthy/Unhealthy' pair.",
+        "operationId" : "HealthCheck",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Country Code -> Country Name JSON file.",
+            "schema" : {
+              "$ref" : "#/definitions/HealthCheck"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unknown Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/diag" : {
+      "get" : {
+        "tags" : [ "ccLookup" ],
+        "summary" : "Get Remote API Status",
+        "description" : "Returns JSON file with remote API Status.",
+        "operationId" : "DiagRemoteApi",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Remote API Status Json File.",
+            "schema" : {
+              "$ref" : "#/definitions/RemoteApiStatus"
+            }
+          },
+          "400" : {
+            "description" : "Bad Request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "401" : {
+            "description" : "Unauthorized",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "Not Found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "default" : {
+            "description" : "Unknown Error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "CountryNames" : {
+      "type" : "array",
+      "description" : "Country Code to Country Name JSONArray file format.",
+      "items" : {
+        "$ref" : "#/definitions/CountryName"
+      }
+    },
+    "CountryName" : {
+      "type" : "object",
+      "required" : [ "countryCode", "countryName" ],
+      "properties" : {
+        "countryCode" : {
+          "type" : "string",
+          "description" : "Country Code"
+        },
+        "countryName" : {
+          "type" : "string",
+          "description" : "Country Name"
+        }
+      },
+      "description" : "Country Code to Country Name JSONObject."
+    },
+    "CountryCodes" : {
+      "type" : "array",
+      "description" : "Country Name to Country Code JSONArray file format.",
+      "items" : {
+        "$ref" : "#/definitions/CountryCode"
+      }
+    },
+    "CountryCode" : {
+      "type" : "object",
+      "required" : [ "countryCode", "countryName" ],
+      "properties" : {
+        "countryName" : {
+          "type" : "string",
+          "description" : "Country Name."
+        },
+        "countryCode" : {
+          "type" : "string",
+          "description" : "Country Code."
+        }
+      },
+      "description" : "Country Name to Country Code JSONObject."
+    },
+    "HealthCheck" : {
+      "type" : "object",
+      "required" : [ "status" ],
+      "properties" : {
+        "status" : {
+          "type" : "string",
+          "description" : "Health Check Status.",
+          "enum" : [ "healthy", "unhealthy" ]
+        }
+      },
+      "description" : "Health Check JSON file format."
+    },
+    "RemoteApiStatus" : {
+      "type" : "object",
+      "properties" : {
+        "api_status" : {
+          "$ref" : "#/definitions/RemoteApiStatus_api_status"
+        }
+      },
+      "description" : "Remote Api Status JSON file format."
+    },
+    "Error" : {
+      "required" : [ "code", "message" ],
+      "properties" : {
+        "code" : {
+          "type" : "string",
+          "description" : "A short error code that defines the error, meant for programmatic parsing."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "A human-readable error string."
+        }
+      },
+      "description" : "Error Information."
+    },
+    "RemoteApiStatus_api_status" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer"
+        },
+        "status" : {
+          "type" : "string"
+        },
+        "cache" : {
+          "type" : "string"
+        },
+        "note" : {
+          "type" : "string"
+        },
+        "count" : {
+          "type" : "string"
+        }
+      },
+      "description" : "Remote Api status JSON file format."
+    }
+  },
+  "parameters" : {
+    "countryCodes" : {
+      "name" : "countryCodes",
+      "in" : "path",
+      "description" : "Comma separated country codes",
+      "required" : true,
+      "type" : "string"
+    },
+    "refresh" : {
+      "name" : "refresh",
+      "in" : "query",
+      "description" : "true, if retrieve info from API; false - if from local file.",
+      "required" : true,
+      "type" : "boolean",
+      "default" : true
+    },
+    "countryNames" : {
+      "name" : "countryNames",
+      "in" : "path",
+      "description" : "Comma separated country names",
+      "required" : true,
+      "type" : "string"
+    }
+  },
+  "responses" : {
+    "400" : {
+      "description" : "Bad Request",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    },
+    "401" : {
+      "description" : "Unauthorized",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    },
+    "404" : {
+      "description" : "Not Found",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    },
+    "500" : {
+      "description" : "Internal Server Error",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    },
+    "default" : {
+      "description" : "Unknown Error",
+      "schema" : {
+        "$ref" : "#/definitions/Error"
+      }
+    }
+  }
+}

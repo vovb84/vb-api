@@ -31,6 +31,21 @@
         <version>2.4.16</version>
         <executions>
           <execution>
+            <id>convert</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>${basedir}/etc/api.yaml</inputSpec>
+              <output>specs</output>
+              <language>swagger</language>
+              <configOptions>
+                <outputFile>api.json</outputFile>
+              </configOptions>
+            </configuration>
+          </execution>
+          <execution>
             <goals>
               <goal>generate</goal>
             </goals>
@@ -211,6 +226,60 @@
               <resources>
                 <resource>
                   <directory>${project.build.directory}/swagger-ui-master/dist</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-etc-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/etc</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>etc</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-env-cfg-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/environment-config</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>environment-config</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-config-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/config</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>config</directory>
+                  <includes>
+                    <include>*</include>
+                  </includes>
                 </resource>
               </resources>
             </configuration>

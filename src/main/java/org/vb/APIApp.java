@@ -5,10 +5,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.configuration.ResourceConfigurationSourceProvider;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import lombok.extern.slf4j.Slf4j;
+import org.vb.config.APIConf;
 import org.vb.resources.APIResource;
 import org.vb.resourceslibs.APIHttpLib;
 import org.vb.resourceslibs.APIJsonLib;
@@ -39,6 +41,7 @@ public class APIApp extends Application<APIConf> {
         /*final AssetsBundle assetsBundle = new
                 AssetsBundle("/swagger-ui", "/ui", "index.html");
         bootstrap.addBundle(assetsBundle); */
+        //bootstrap.setConfigurationSourceProvider(new ResourceConfigurationSourceProvider());
         bootstrap.addBundle(new AssetsBundle(
                 "/swagger-ui", "/ui", "index.html", "ui"));
         bootstrap.addBundle(new AssetsBundle(
@@ -47,11 +50,11 @@ public class APIApp extends Application<APIConf> {
     }
 
     @Override
-    public void run(final APIConf configuration,
+    public void run(final APIConf apiConf,
                     final Environment environment) {
         /* Application Implementation */
         log.info("Initializing APIApp...");
-        this.initSwagger(configuration, environment);
+        this.initSwagger(apiConf, environment);
     }
 
     private void initSwagger(APIConf apiConf, Environment env) {
@@ -82,7 +85,7 @@ public class APIApp extends Application<APIConf> {
         beanConfig.setScan(true); */
 
         try {
-            Injector injector = Guice.createInjector(new APIModule());
+            Injector injector = Guice.createInjector(new APIModule(apiConf));
             registerResources(env, injector);
             log.info("APIApp initialization completed.");
         } catch (Throwable throwable) {

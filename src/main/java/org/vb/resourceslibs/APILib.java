@@ -7,10 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-import org.vb.model.CountryName;
-import org.vb.model.CountryNames;
-import org.vb.model.CountryCode;
-import org.vb.model.CountryCodes;
+import org.vb.config.APIConf;
+import org.vb.model.*;
 
 @Slf4j
 @Getter
@@ -20,14 +18,18 @@ public class APILib {
     private org.vb.resourceslibs.APIJsonLib apiJsonLib;
     private org.vb.resourceslibs.APIHttpLib apiHttpLib;
     private boolean bdirExists = false;
-    private String strLocalDirPath = "/tmp/api";
-    private String strLocalFileName = "apiapp.json";
+    //private String strLocalDirPath = "/tmp/api";
+    //private String strLocalFileName = "apiapp.json";
+    private String strLocalDirPath = "";
+    private String strLocalFileName = "";
+    private String strRemoteApiURL = "";
+    private String strRemoteApiPath = "";
 
     /* ==========================================
      * =            Constructor                 =
      * ========================================== */
     @Inject
-    public APILib() {
+    public APILib(APIConf apiConf) {
         apiHttpLib = new APIHttpLib();
         apiJsonLib = new APIJsonLib();
         apiUtilLib = new APIUtilLib();
@@ -38,6 +40,11 @@ public class APILib {
                 .bdirCreate(true)
                 .bdirClean(false)
                 .buildlocalDir();
+        strLocalDirPath = apiConf.getApiParameters().getLocalDir();
+        strLocalFileName = apiConf.getApiParameters().getLocalFile();
+        strRemoteApiURL = apiConf.getApiParameters().getRemoteApiUrl();
+        strRemoteApiPath = apiConf.getApiParameters().getRemoteApiPath();
+
     }
 
     /* ===============================
@@ -242,4 +249,87 @@ public class APILib {
         return countryCodes;
     }
 
+
+
+
+    /* ===============================
+     * =      getRemoteApiStatus        =
+     * ===============================
+     * method to get remote api status
+     * ===============================
+     * Receives:
+     *  - Nothing
+     * Returns:
+     *  - RemoteApiStatus remoteApiStatus:
+     *   JSONObject of JSONObjects:
+     *    {
+     *      "api_status": {
+     *        "cache": "cached",
+     *        "code": 200,
+     *        "status": "ok",
+     *        "note": "The api works, we could fetch countries.",
+     *        "count": 238
+     *      }
+     *    }
+     * =============================== */
+    @Builder(builderMethodName = "getRemoteApiStatusBuilder",
+            buildMethodName = "buildgetRemoteApiStatus")
+    public RemoteApiStatus getRemoteApiStatus() {
+
+        /* Map of "api_status" key->value */
+        Map<String, String> mapRemoteApiStatus = new HashMap<>();
+
+        long longTime = apiUtilLib.getCurrentDateTimeEpoch();
+        String strTime = apiUtilLib.getDateTimeBuilder()
+                .sdateFormat("yyyy-mm-dd HH:mm:ss")
+                .isUTC(true)
+                .ddate(apiUtilLib.getCurrentDateTime())
+                .buildgetDateTime();
+        log.debug("Begin retrieving page from {}/{} at {}.",
+                strRemoteApiURL,
+                strRemoteApiPath,
+                strTime);
+
+        /* get page as a string */
+        String strPage = apiHttpLib.getPageBuilder()
+                .intConnectTimeout(3000)
+                .intSocketTimeout(3000)
+                .strURL(strRemoteApiURL)
+                .strQueryPath(strRemoteApiPath)
+                .buildgetPage();
+        log.debug("Page from {}/{} retrieved at {}.",
+                strRemoteApiURL,
+                strRemoteApiPath,
+                strTime);
+
+        /* get 'api_status' block from retrieved page */
+        ArrayList<String> alApiStatusKeys = new ArrayList<>();
+        alApiStatusKeys.add(0, str);
+        Map<String, String> mapApiStatus = apiJsonLib.getKeyValueMapFromNestedKeysBuilder()
+                .sjsonFile(strPage)
+                .bisFile(true)
+                .alKeys(alCountryNames)
+                .buildgetKeyValueMapFromNestedKeys();
+        Map<String, String> mapApiStatusSorted = new TreeMap<>(mapApiStatus);
+        /* create RemoteApiStatus JSONArray */
+        RemoteApiStatus countryCodes = new RemoteApiStatus();
+        if (!mapNameCodeSorted.isEmpty()) {
+            for (Map.Entry<String, String> strCountryName : mapNameCodeSorted.entrySet()) {
+                log.info("Adding entry {} -> {} to RemoteApiStatus JSONArray.",
+                        strCountryName.getKey(),
+                        strCountryName.getValue());
+                CountryCode countryCode = new CountryCode();
+                countryCode.setCountryName(strCountryName.getKey());
+                countryCode.setCountryCode(strCountryName.getValue());
+                countryCodes.add(countryCode);
+            }
+        } else {
+            log.error("Retrieved map CountryName -> CountryCode is empty.");
+        }
+        return countryCodes;
+    }
+    
+    
+    
+    
 }

@@ -167,8 +167,6 @@ definitions:
   RemoteApiStatus:
     description: Remote Api Status JSON file format.
     type: object
-    required:
-      - api_status
     properties:
       api_status:
         description: Remote Api status JSON file format.
@@ -178,9 +176,12 @@ definitions:
             type: integer
           status:
             type: string
-            enum:
-              - ok
-              - fail
+          cache:
+            type: string
+          note:
+            type: string
+          count:
+            type: string
 
   Error:
     description: Error Information.
