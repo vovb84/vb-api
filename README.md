@@ -4,8 +4,10 @@ How to start the vb-api application
 ---
 
 1. Run `mvn clean install` to build your application
-2. Start application with `java -jar target/vb-api-1.0-SNAPSHOT.jar server`
-3. To check that your application is running enter url `http://localhost:8080`
+2. 2 ways to start application:
+   - run `java -jar target/vb-api-1.0-SNAPSHOT.jar server config/desktop.yaml`
+   - run `./run.sh`
+3. To check that your application is running enter url `http://localhost:20080`
 
 RestAPI:
 ---
