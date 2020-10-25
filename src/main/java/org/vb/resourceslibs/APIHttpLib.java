@@ -62,7 +62,7 @@ public class APIHttpLib {
             if (strQueryPath.isEmpty()) {
                 strHost = strHost.concat(strURL);
             } else {
-                strHost = strHost.concat("/" + strQueryPath);
+                strHost = strHost.concat(strURL + "/" + strQueryPath);
             }
             httpAsyncClient.start();
             final CountDownLatch countDownLatch = new CountDownLatch(1);

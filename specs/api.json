@@ -279,9 +279,8 @@
       "required" : [ "status" ],
       "properties" : {
         "status" : {
-          "type" : "string",
-          "description" : "Health Check Status.",
-          "enum" : [ "healthy", "unhealthy" ]
+          "type" : "boolean",
+          "description" : "Health Check Status."
         }
       },
       "description" : "Health Check JSON file format."
@@ -325,7 +324,7 @@
           "type" : "string"
         },
         "count" : {
-          "type" : "string"
+          "type" : "integer"
         }
       },
       "description" : "Remote Api status JSON file format."

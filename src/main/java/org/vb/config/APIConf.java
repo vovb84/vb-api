@@ -23,4 +23,5 @@ public class APIConf extends Configuration {
 
     @Getter
     private ApiParameters apiParameters;
+
 }

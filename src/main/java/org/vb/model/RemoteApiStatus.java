@@ -25,7 +25,7 @@ import javax.validation.constraints.*;
  * Remote Api Status JSON file format.
  */
 @ApiModel(description = "Remote Api Status JSON file format.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-21T21:41:38.212-07:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-24T21:02:39.389-07:00")
 public class RemoteApiStatus   {
   @JsonProperty("api_status")
   private RemoteApiStatusApiStatus apiStatus = null;

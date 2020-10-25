@@ -9,6 +9,7 @@ import javax.ws.rs.*;
 import org.vb.config.APIConf;
 import org.vb.model.CountryCodes;
 import org.vb.model.CountryNames;
+import org.vb.model.HealthCheck;
 import org.vb.model.RemoteApiStatus;
 import org.vb.resourceslibs.APILib;
 
@@ -80,7 +81,7 @@ public class APIResource {
     }
 
     /* ============ get API Health ============ */
-    /* @GET
+    @GET
     @Path("/health")
     @Produces({"application/json"})
     public HealthCheck getHealthCheck() throws Exception {
@@ -88,8 +89,11 @@ public class APIResource {
         log.info("Method getHealthCheck. " +
                 "Initiate API Health Check.");
 
-        return strHealthCheck;
-    } */
+        APILib apiLib = new APILib(conf);
+        HealthCheck healthCheck = apiLib.getHealthCheckBuilder()
+                .buildgetHealthCheck();
+        return healthCheck;
+    }
 
     /* ============ get Remote API Status ============ */
     @GET
@@ -100,7 +104,9 @@ public class APIResource {
         log.info("Method getDiagRemoteApi. " +
                 "Initiate Remote API Diagnostics.");
 
-        RemoteApiStatus remoteApiStatus = new RemoteApiStatus();
+        APILib apiLib = new APILib(conf);
+        RemoteApiStatus remoteApiStatus = apiLib.getRemoteApiStatusBuilder()
+                .buildgetRemoteApiStatus();
 
         return remoteApiStatus;
     }

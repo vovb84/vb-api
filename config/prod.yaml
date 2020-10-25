@@ -41,8 +41,11 @@ apiParameters:
   remoteApiPath: "/api"
   localDir: "/tmp/api"
   localFile: "apiapp.json"
+  localApiUrl: "127.0.0.1"
+  localApiPath: "health"
   apiKeys:
-    - data
+    data: "data"
+    apiStatus: "api_status"
   apiStatusKeys:
-    - api_status
-    - reply
+    request: "request"
+    reply: "reply"

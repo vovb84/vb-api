@@ -24,7 +24,7 @@ import javax.validation.constraints.*;
  * Country Code to Country Name JSONArray file format.
  */
 @ApiModel(description = "Country Code to Country Name JSONArray file format.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-21T21:41:38.212-07:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-24T21:02:39.389-07:00")
 public class CountryNames extends ArrayList<CountryName>  {
 
   @Override

@@ -16,7 +16,6 @@ package org.vb.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.*;
@@ -25,43 +24,12 @@ import javax.validation.constraints.*;
  * Health Check JSON file format.
  */
 @ApiModel(description = "Health Check JSON file format.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-21T21:41:38.212-07:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-24T21:02:39.389-07:00")
 public class HealthCheck   {
-  /**
-   * Health Check Status.
-   */
-  public enum StatusEnum {
-    HEALTHY("healthy"),
-    
-    UNHEALTHY("unhealthy");
-
-    private String value;
-
-    StatusEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static StatusEnum fromValue(String text) {
-      for (StatusEnum b : StatusEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-
   @JsonProperty("status")
-  private StatusEnum status = null;
+  private Boolean status = null;
 
-  public HealthCheck status(StatusEnum status) {
+  public HealthCheck status(Boolean status) {
     this.status = status;
     return this;
   }
@@ -73,11 +41,11 @@ public class HealthCheck   {
   @JsonProperty("status")
   @ApiModelProperty(required = true, value = "Health Check Status.")
   @NotNull
-  public StatusEnum getStatus() {
+  public Boolean isStatus() {
     return status;
   }
 
-  public void setStatus(StatusEnum status) {
+  public void setStatus(Boolean status) {
     this.status = status;
   }
 

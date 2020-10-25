@@ -24,7 +24,7 @@ import javax.validation.constraints.*;
  * Remote Api status JSON file format.
  */
 @ApiModel(description = "Remote Api status JSON file format.")
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-21T21:41:38.212-07:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaJerseyServerCodegen", date = "2020-10-24T21:02:39.389-07:00")
 public class RemoteApiStatusApiStatus   {
   @JsonProperty("code")
   private Integer code = null;
@@ -39,7 +39,7 @@ public class RemoteApiStatusApiStatus   {
   private String note = null;
 
   @JsonProperty("count")
-  private String count = null;
+  private Integer count = null;
 
   public RemoteApiStatusApiStatus code(Integer code) {
     this.code = code;
@@ -117,7 +117,7 @@ public class RemoteApiStatusApiStatus   {
     this.note = note;
   }
 
-  public RemoteApiStatusApiStatus count(String count) {
+  public RemoteApiStatusApiStatus count(Integer count) {
     this.count = count;
     return this;
   }
@@ -128,11 +128,11 @@ public class RemoteApiStatusApiStatus   {
    **/
   @JsonProperty("count")
   @ApiModelProperty(value = "")
-  public String getCount() {
+  public Integer getCount() {
     return count;
   }
 
-  public void setCount(String count) {
+  public void setCount(Integer count) {
     this.count = count;
   }
 

@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @Setter
 @Accessors(chain = true)
@@ -23,5 +25,17 @@ public class ApiParameters {
 
     @NonNull
     private String localFile;
+
+    @NonNull
+    private String localApiUrl;
+
+    @NonNull
+    private String localApiPath;
+
+    @NotNull
+    private APIKeys apiKeys;
+
+    @NotNull
+    private APIStatusKeys apiStatusKeys;
 
 }
