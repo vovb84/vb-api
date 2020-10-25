@@ -159,16 +159,14 @@ definitions:
     properties:
       status:
         description: Health Check Status.
-        type: string
+        type: boolean
         enum:
-          - healthy
-          - unhealthy
+          - true
+          - false
 
   RemoteApiStatus:
     description: Remote Api Status JSON file format.
     type: object
-    required:
-      - api_status
     properties:
       api_status:
         description: Remote Api status JSON file format.
@@ -178,9 +176,12 @@ definitions:
             type: integer
           status:
             type: string
-            enum:
-              - ok
-              - fail
+          cache:
+            type: string
+          note:
+            type: string
+          count:
+            type: integer
 
   Error:
     description: Error Information.

@@ -1,0 +1,49 @@
+server:
+  minThreads: 1
+  maxThreads: 1024
+  # The maximum time to wait for Jetty, and all Managed instances, to cleanly shutdown before forcibly terminating them
+  shutdownGracePeriod: 30 seconds
+  adminMinThreads: 1
+  # Should be > 1.5 times the number of cores: https://github.com/dropwizard/dropwizard/issues/523
+  adminMaxThreads: 110
+  applicationConnectors:
+    - type: http
+      port: 20080
+  adminConnectors:
+    - type: http
+      port: 20081
+
+logging:
+  appenders:
+    - type: console
+      timeZone: UTC
+      threshold: DEBUG
+      target: stdout
+      logFormat: "%-5level %date{ISO8601, UTC} [%thread] %logger: %message%n"
+    - type: file
+      timeZone: UTC
+      threshold: INFO
+      currentLogFilename: "/usr/local/var/log/vb-api.log"
+      logFormat: "%-5level %date{ISO8601, UTC} [%thread] %logger: %message%n"
+      archive: true
+      archivedLogFilenamePattern: "/usr/local/var/log/application.%d.log.gz"
+      archivedFileCount: 4
+
+tlsCertPath: "/var/secret/vb-api/tls/cert/cert.pem"
+tlsKeyPath: "/var/secret/vb-api/tls/key/key.pem"
+tlsTrustPath: "/etc/secret/vb-api/tlstrust/tls-bundle.pem"
+tlsIntermediatePath: "/var/secret/vb-api/tls/cert/intermediates.pem"
+
+apiParameters:
+  remoteApiUrl: "https://www.travel-advisory.info"
+  remoteApiPath: "/api"
+  localDir: "/tmp/api"
+  localFile: "apiapp.json"
+  localApiUrl: "127.0.0.1"
+  localApiPath: "health"
+  apiKeys:
+    data: "data"
+    apiStatus: "api_status"
+  apiStatusKeys:
+    request: "request"
+    reply: "reply"

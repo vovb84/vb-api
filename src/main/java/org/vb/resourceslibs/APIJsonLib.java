@@ -187,5 +187,80 @@ public class APIJsonLib {
         }
         return strReturn;
     }
+    
+    /* ==========================================
+     * =      getKeyValueMapFromNestedKeys      =
+     * ==========================================
+     * Method to get Map of keys: String pairs
+     * from provided JSON file JSONObject-block.
+     * Receives:
+     *  - String sjsonFile: JSON file path/name or
+     *    JSON string (depends on 3rd param)
+     *  - ArrayList alKeys: list of keys where all the
+     *    key:value pairs are located. Ex:
+     *    - ("key1", "key2"): Key:value pairs are
+     *      located in key1->key2->{} JSONObject
+     *  Note: If alKeys is empty - return map of
+     *    key:value from root of the file
+     *  - boolean bisFile:
+     *    - true: if sjsonFile is file path/name
+     *    - false: if sjsonFile is actual JSONObject string
+     * Returns:
+     *  - Map<String,Object> mapKeyValue.
+     *    - Returns empty Map if any error
+     * ========================================== */
+    @Builder (builderMethodName = "getKeyValueMapFromNestedKeysBuilder",
+            buildMethodName = "buildgetKeyValueMapFromNestedKeys")
+    public Map<String,Object> getKeyValueMapFromNestedKeys(
+            String sjsonFile,
+            ArrayList<String> alKeys,
+            boolean bisFile) {
+        Map<String,Object> mapKeyValue = new HashMap<>();
+        try {
+            JSONObject joFile = null;
+            /* get JSON object */
+            if (bisFile) {
+                joFile = loadJsonObjFromFile(sjsonFile);
+            } else {
+                joFile = new JSONObject(sjsonFile);
+            }
+            /* get JSON object for key:value pairs located in
+             * this file under key1->key2 from lKeys */
+            if (!alKeys.isEmpty()) {
+                for (String skey : alKeys) {
+                    JSONObject joKeyValues = joFile.getJSONObject(skey);
+                    joFile = null;
+                    joFile = joKeyValues;
+                }
+            }
+
+            /* get array of key_names from JSONObject */
+            String[] saKeys = JSONObject.getNames(joFile);
+            /* loop through array */
+            for (String skey : saKeys) {
+                /* get corresponding Object value */
+                Object objValue = joFile.get(skey);
+                //String skeyValue = joFile.getString(skey);
+                /* add it to Map */
+                mapKeyValue.put(skey, objValue);
+            }
+        } catch(JSONException je) {
+            /* if some of the "sevX" keys doesn't exist in metrics_default_parameters.json file */
+            if (je.toString().matches("^.*JSONObject\\[\"sev\\d\"\\] not found.*")) {
+                log.info("Severity {} doesn't exist.",
+                        je.toString()
+                                .replaceAll("^.*JSONObject\\[\"", "")
+                                .replaceAll("\"\\] not found.*", ""));
+            } else {
+                log.error("Exception reading JSON values {} from file {}.",
+                        je.toString(),
+                        sjsonFile);
+            }
+        } catch(Exception e) {
+            log.error("Exception in getKeyValueMapFromNestedKeys method: {}",
+                    e.toString());
+        }
+        return mapKeyValue;
+    }
 
 } /* end of APIJsonLib class */
